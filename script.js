@@ -2,7 +2,7 @@
 
 // button click -> prompt asking for pwd length -> check that input fits requirements -> throw error if not -> check which character users want to include -> add those to an array when they choose yes -> error check for picking at least one criteria -> throw alert if not at least one -> use new array from chosen criteria to pick a random [index] in the array -> add that character that matches random index to a string value each time for the length of the chosen pwd length
 
-//////////////////////////////----------MY CODE BEGINS HERE----------//////////////////////////////
+//////////////////////////////----------MY CODE BEGINS HERE----------////////////////////////////////
 
 //defining the arrays that contain all possible characters for generator
 var charactersLowercase = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
@@ -10,6 +10,7 @@ var charactersUppercase = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K'
 var charactersNumeric = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
 var charactersSpecial = ['~', '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '.', '<', '>', '+', '=', '-', '_', '[', ']', ':', ';', '?', '/'];
 
+//function to generate password starts here
 function generatePassword() {
   //creating empty array in which to put the included arrays from above
   var pwdCriteria = [];
@@ -25,25 +26,40 @@ function generatePassword() {
   //end error checking
 
   //prompting user to select which character types to include and adding the characters to empty array if they choose OK
-  //if user chooses to include Uppercase add to array pwdCriteria
   var includesLowercase = confirm('Click OK to include lowercase characters.');
-  if (includesLowercase == true) {
-    pwdCriteria = pwdCriteria.concat(charactersLowercase);
-  }
-  //if user chooses to include Lowercase add to array pwdCriteria
   var includesUppercase = confirm('Click OK to include uppercase characters.');
-  if (includesUppercase == true) {
-    pwdCriteria = pwdCriteria.concat(charactersUppercase);
-  }
-  //if user chooses to include Numeric add to array pwdCriteria
   var includesNumeric = confirm('Click OK to include numeric characters.');
-  if (includesNumeric == true) {
-    pwdCriteria = pwdCriteria.concat(charactersNumeric);
-  }
-  //if user chooses to include Special add to array pwdCriteria
   var includesSpecial = confirm('Click OK to include special characters.');
-  if (includesSpecial == true) {
-    pwdCriteria = pwdCriteria.concat(charactersSpecial);
+
+  //storing includesxxxx in an object that can be iterated on below
+  var criteriaObject = {
+    includesLowercase: includesLowercase,
+    includesUppercase: includesLowercase,
+    includesNumeric: includesNumeric,
+    includesSpecial: includesSpecial
+  }
+
+  //looping on the object criteriaObject, and when the variables are true, run the following switch statement
+  // the switch statement concats a different array based on which object key the loop is on.
+  for (var key in criteriaObject) {
+    if (criteriaObject[key] == true) {
+      switch (key) {
+        case "includesLowercase":
+          pwdCriteria = pwdCriteria.concat(charactersLowercase);
+          break;
+        case "includesUppercase":
+          pwdCriteria = pwdCriteria.concat(charactersUppercase);
+          break;
+        case "includesNumeric":
+          pwdCriteria = pwdCriteria.concat(charactersNumeric);
+          break;
+        case "includesSpecial":
+          pwdCriteria = pwdCriteria.concat(charactersSpecial);
+          break;
+        default:
+          break;
+      }
+    }
   }
 
   // error checking the above prompts to check that at least one character type is included
@@ -52,7 +68,6 @@ function generatePassword() {
     return null;
   }
   //end error checking
-
 
   //create empty variable to store randomly generated password string choices
   var pwdGenerated = "";
@@ -82,5 +97,4 @@ function writePassword() {
   var passwordText = document.querySelector('#password');
 
   passwordText.value = password;
-
 }
